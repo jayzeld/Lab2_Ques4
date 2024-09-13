@@ -11,43 +11,91 @@
     <title>Multiplication Table and Factorials</title>
     <style>
         body {
-            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            margin: 0;
+            background-color: lightblue;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            height: 100vh; 
+            overflow: auto;
+        }
+
+        .content-container {
+            max-width: 90%;
+            max-height: 100vh;
+            padding: 20px;
+            background: lightblue;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label, input, table {
+            display: block;
+            margin-bottom: 10px;
             text-align: center;
+            width: 100%;
         }
 
         input {
-            padding: 8px;
-            font-size: 16px;
-            margin: 10px;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+            max-width: 250px;
+            border-radius: 15px;
+            background-color: #f0f0f0;
         }
 
         #result {
+            display: none;
             margin-top: 20px;
             font-weight: bold;
-            white-space: pre-wrap; 
+            padding: 10px;
+            border: none;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            width: fit-content;
+            max-width: 100%;
+            word-wrap: break-word;
+            overflow: auto; 
         }
 
-        pre {
-            display: inline-block; 
-            text-align: left;
+        table {
+            border-collapse: collapse;
+            width: 100%; 
+            max-width: 100%;
+            border: none;
         }
+
+        td {
+            padding: 5px; 
+            text-align: center;
+        }
+
+        @@media (max-width: 600px) {
+            table {
+                font-size: 0.8em;
+            }
+        }
+
+
+        button {
+            color: blue;
+            border-radius: 15px;
+            padding: 10px 20px;
+            background-color: darkgray;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: lightgray;
+                color: white;
+            }
+
     </style>
 </head>
+
 <body>
-    <div>
+    <div class="content-container">
         <h1>Multiplication Table and Factorials</h1>
         <label for="number">Enter a number:</label>
         <input type="number" id="number" placeholder="Number" min="1">
@@ -56,7 +104,6 @@
     </div>
 
     <script>
-
         function factorial(num) {
             if (num === 0 || num === 1) return 1;
             let result = 1;
@@ -67,37 +114,40 @@
         }
 
         function generateMultiplicationTable(n) {
-            let table = '';
+            let table = '<table border="1" cellpadding="5" style="margin: 0 auto;">';
             for (let i = 1; i <= n; i++) {
-                let row = '';
+                table += '<tr>';
                 for (let j = 1; j <= n; j++) {
-                    row += (i * j).toString().padStart(4, ' ');
+                    table += `<td>${i * j}</td>`;
                 }
-                table += row + '\n';
+                table += '</tr>';
             }
+            table += '</table>';
             return table;
         }
 
         function generateResults() {
-            //user input
+            // user input
             const input = parseInt(document.getElementById('number').value);
+            const resultElement = document.getElementById('result');
 
-            //validation
+            // validation
             if (isNaN(input) || input < 1) {
-                document.getElementById('result').innerHTML = "Please enter a valid number greater than 0.";
+                resultElement.innerHTML = "Please enter a valid number greater than 0.";
+                resultElement.style.display = "block";
                 return;
             }
 
-
-            //generation of multiplciation table and factorial of the number
+            // generation of multiplication table and factorial of the number
             const multiplicationTable = generateMultiplicationTable(input);
             let factorials = '';
             for (let i = 1; i <= input; i++) {
-                factorials += `${i}! = ${factorial(i)}\n`;
+                factorials += `${i}! = ${factorial(i)}<br>`;
             }
 
-            //displaying of results
-            document.getElementById('result').innerHTML = `<h2>Multiplication Table:</h2><pre>${multiplicationTable}</pre><h2>Factorials:</h2><pre>${factorials}</pre>`;
+            // displaying of results
+            resultElement.innerHTML = `<h2>Multiplication Table:</h2>${multiplicationTable}<h2>Factorials:</h2>${factorials}`;
+            resultElement.style.display = "block";
         }
     </script>
 </body>
